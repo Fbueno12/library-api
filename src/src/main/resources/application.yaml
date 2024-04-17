@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: libraryAPI
+  datasource:
+    url: jdbc:h2:mem:libDB
+    username: sa
+    password: pw
+    driverClassName: org.h2.Driver
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+      path: /h2
