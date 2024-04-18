@@ -1,9 +1,9 @@
 package br.com.fbueno.libraryAPI.services
 
+import br.com.fbueno.libraryAPI.clients.OpenLibraryClient
 import br.com.fbueno.libraryAPI.exceptions.BookAlreadyExistsException
 import br.com.fbueno.libraryAPI.exceptions.BookNotFoundException
-import br.com.fbueno.libraryAPI.exceptions.BookTitleAlreadyExistsException
-import br.com.fbueno.libraryAPI.extensions.toModel
+import br.com.fbueno.libraryAPI.factory.BookModelFactory
 import br.com.fbueno.libraryAPI.models.BookModel
 import br.com.fbueno.libraryAPI.models.dto.BookDTO
 import br.com.fbueno.libraryAPI.repository.BookRepository
@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class BookService(
-    val bookRepository: BookRepository
+    val bookRepository: BookRepository,
+    val openLibraryClient: OpenLibraryClient,
+    val bookModelFactory: BookModelFactory
 ) {
 
     fun index(): List<BookModel> {
@@ -26,16 +28,18 @@ class BookService(
         if (bookRepository.findByTitle(book.title) != null)
             throw BookAlreadyExistsException()
 
-        return bookRepository.save(book.toModel())
+        val openLibBook = openLibraryClient.searchBooks(book.title)
+        val generatedBook = bookModelFactory.createInstance(openLibBook)
+
+        return bookRepository.save(generatedBook)
     }
 
     fun update(id: Long, book: BookDTO) {
         val updatedBook = bookRepository.findById(id).orElseThrow { throw BookNotFoundException() }
-        if (bookRepository.findByTitle(book.title) != null) throw BookTitleAlreadyExistsException()
         updatedBook.apply {
             title = book.title
-            description = book.description
-            author = book.author
+            description = book.description!!
+            author = book.author!!
         }
         bookRepository.save(updatedBook)
     }

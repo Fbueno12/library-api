@@ -1,6 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+	id 'java'
 	id 'org.springframework.boot' version '3.2.4'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id 'org.jetbrains.kotlin.jvm' version '1.9.23'
@@ -20,6 +21,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
@@ -27,7 +29,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-tasks.withType(KotlinCompile) {
+tasks.withType(KotlinCompile).configureEach {
 	kotlinOptions {
 		freeCompilerArgs += '-Xjsr305=strict'
 		jvmTarget = '17'

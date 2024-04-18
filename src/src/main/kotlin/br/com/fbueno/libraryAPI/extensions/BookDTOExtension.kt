@@ -7,7 +7,7 @@ fun BookDTO.toModel(): BookModel {
     return BookModel(
         id = null,
         title = this.title,
-        description = this.description,
-        author = this.author
+        description = this.description!!,
+        author = this.author!!
     )
 }
