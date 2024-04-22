@@ -35,12 +35,17 @@ class BookService(
     }
 
     fun update(id: Long, book: BookDTO) {
-        val updatedBook = bookRepository.findById(id).orElseThrow { throw BookNotFoundException() }
+        val updatedBook = this.find(id)
         updatedBook.apply {
             title = book.title
             description = book.description!!
             author = book.author!!
         }
         bookRepository.save(updatedBook)
+    }
+
+    fun delete(id: Long) {
+        this.find(id)
+        bookRepository.deleteById(id)
     }
 }

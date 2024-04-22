@@ -36,4 +36,10 @@ class BookController(
     ) {
         bookService.update(id, book)
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(@PathVariable id: Long) {
+        bookService.delete(id)
+    }
 }
