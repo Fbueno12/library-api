@@ -28,7 +28,7 @@ class BookService(
         if (bookRepository.findByTitle(book.title) != null)
             throw BookAlreadyExistsException()
 
-        val openLibBook = openLibraryClient.searchBooks(book.title)
+        val openLibBook = openLibraryClient.searchBooks(book.title) // fazer tratamento de erros caso a api dê erro.
         val generatedBook = bookModelFactory.createInstance(openLibBook)
 
         return bookRepository.save(generatedBook)
